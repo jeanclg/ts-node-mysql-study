@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findOne = void 0;
+exports.create = exports.findOne = void 0;
 const db_1 = require("../db");
 // Modelo que faz a Query de 1 elemento apenas
 const findOne = (orderId, cb) => {
@@ -25,3 +25,16 @@ const findOne = (orderId, cb) => {
     });
 };
 exports.findOne = findOne;
+const create = (customer, cb) => {
+    // Query do MySQL
+    const queryString = "INSERT INTO customer (name, password, email) VALUES (?, ?, ?)";
+    // Faz a query no mysql passando os valores a ser inputados no segundo parametro da função
+    db_1.db.query(queryString, [customer.name, customer.password, customer.email], (err, result) => {
+        if (err)
+            cb(err);
+        const insertId = result.insertId;
+        // Callback que caso não tenha erros cadastra um novo customer
+        cb(err, insertId);
+    });
+};
+exports.create = create;

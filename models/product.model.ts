@@ -24,3 +24,24 @@ export const findOne = (orderId: number, cb: Function) => {
     cb(err, product);
   });
 };
+
+export const create = (product: Product, cb: Function) => {
+  const queryString =
+    "INSERT INTO product (name, description, instock_quantity, price) VALUES (?, ?, ?, ?)";
+
+  db.query(
+    queryString,
+    [
+      product.name,
+      product.description,
+      product.instock_quantity,
+      product.price,
+    ],
+    (err, result) => {
+      if (err) cb(err);
+
+      const insertId = (<OkPacket>result).insertId;
+      cb(err, insertId);
+    }
+  );
+};

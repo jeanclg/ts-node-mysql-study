@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findOne = void 0;
+exports.create = exports.findOne = void 0;
 const db_1 = require("../db");
 // Modelo que faz a Query de 1 elemento apenas
 const findOne = (orderId, cb) => {
@@ -26,3 +26,18 @@ const findOne = (orderId, cb) => {
     });
 };
 exports.findOne = findOne;
+const create = (product, cb) => {
+    const queryString = "INSERT INTO product (name, description, instock_quantity, price) VALUES (?, ?, ?, ?)";
+    db_1.db.query(queryString, [
+        product.name,
+        product.description,
+        product.instock_quantity,
+        product.price,
+    ], (err, result) => {
+        if (err)
+            cb(err);
+        const insertId = result.insertId;
+        cb(err, insertId);
+    });
+};
+exports.create = create;

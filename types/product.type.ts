@@ -5,6 +5,6 @@ export interface BasicProduct {
 export interface Product extends BasicProduct {
   name: string;
   description: string;
-  inStockQuantity: number;
+  instock_quantity: number;
   price: number;
 }

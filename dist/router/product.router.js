@@ -18,6 +18,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -27,11 +36,22 @@ const express_1 = __importDefault(require("express"));
 const productModel = __importStar(require("../models/product.model"));
 const productRouter = express_1.default.Router();
 exports.productRouter = productRouter;
-productRouter.get("/:id", (req, res) => {
+// Buscar dados de uma order
+productRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Pega o valor do id passado pela URL e atribui a variavel id
     const id = Number(req.params.id);
+    // Usa a função que esta no order.model
     productModel.findOne(id, (err, product) => {
         if (err)
             return res.status(500).json(err);
-        return res.status(200).json({ data: product });
+        res.status(200).json({ data: product });
     });
-});
+}));
+productRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newProduct = req.body;
+    productModel.create(newProduct, (err, product) => {
+        if (err)
+            return res.status(500).json(500);
+        res.status(201).json({ data: newProduct });
+    });
+}));

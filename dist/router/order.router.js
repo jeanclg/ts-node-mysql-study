@@ -36,12 +36,14 @@ const express_1 = __importDefault(require("express"));
 const orderModel = __importStar(require("../models/order.model"));
 const orderRouter = express_1.default.Router();
 exports.orderRouter = orderRouter;
+// Buscar dados de uma order
 orderRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Pega o valor do id passado pela URL e atribui a variavel id
     const id = Number(req.params.id);
+    // Usa a função que esta no order.model
     orderModel.findOne(id, (err, order) => {
-        if (err) {
+        if (err)
             return res.status(500).json({ message: err.message });
-        }
         res.status(200).json({ data: order });
     });
 }));

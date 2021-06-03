@@ -6,7 +6,7 @@ const db_1 = require("../db");
 const findOne = (orderId, cb) => {
     // Query do MySQL
     const queryString = `
-    "SELECT 
+    SELECT 
     product_order.*,
       product.*,
       customer.name,
@@ -14,7 +14,7 @@ const findOne = (orderId, cb) => {
     FROM product_order
     INNER JOIN customer ON customer.id=product_order.customer_id
     INNER JOIN product ON product.id=product_order.product_id
-    WHERE product_order.order_id=?"`;
+    WHERE product_order.order_id=?`;
     // Faz a query no mysql a partir da variavel queryString com o orderId
     db_1.db.query(queryString, orderId, (err, result) => {
         if (err) {
