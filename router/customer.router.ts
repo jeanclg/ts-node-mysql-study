@@ -4,7 +4,16 @@ import { BasicCustomer, Customer } from "../types/customer.type";
 
 const customerRouter = express.Router();
 
-// Buscar dados de uma order
+// Buscar dados de todos os usuarios
+customerRouter.get("/all", async (req: Request, res: Response) => {
+  customerModel.findAll((err: Error, customers: Customer[]) => {
+    if (err) return res.status(500).json(err);
+
+    res.status(200).json({ data: customers });
+  });
+});
+
+// Buscar dados de um usuario
 customerRouter.get("/:id", async (req: Request, res: Response) => {
   // Pega o valor do id passado pela URL e atribui a variavel id
   const id: number = Number(req.params.id);
@@ -16,6 +25,7 @@ customerRouter.get("/:id", async (req: Request, res: Response) => {
   });
 });
 
+// Cadastrar um novo usuario
 customerRouter.post("/signup", async (req: Request, res: Response) => {
   const newCustomer: Customer = req.body;
 

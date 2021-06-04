@@ -2,7 +2,32 @@ import { BasicProduct, Product } from "../types/product.type";
 import { db } from "../db";
 import { RowDataPacket, OkPacket } from "mysql2";
 
-// Modelo que faz a Query de 1 elemento apenas
+// Modelo que faz a query de todos os produtos
+export const findAll = (cb: Function) => {
+  const queryString = "SELECT * FROM product";
+  db.query(queryString, (err, result) => {
+    if (err) cb(err);
+
+    const rows = <RowDataPacket[]>result;
+
+    const products: Product[] = [];
+
+    rows.forEach((row) => {
+      const product: Product = {
+        id: row.id,
+        name: row.name,
+        description: row.description,
+        instock_quantity: row.instock_quantity,
+        price: row.price,
+      };
+
+      products.push(product);
+    });
+    cb(err, products);
+  });
+};
+
+// Modelo que faz a  query de 1 elemento apenas
 export const findOne = (orderId: number, cb: Function) => {
   // Query do MySQL
   const queryString = "SELECT * FROM product WHERE product.id=?";
@@ -25,7 +50,9 @@ export const findOne = (orderId: number, cb: Function) => {
   });
 };
 
+// Modelo que cria um novo produto
 export const create = (product: Product, cb: Function) => {
+  // Query do MySQL
   const queryString =
     "INSERT INTO product (name, description, instock_quantity, price) VALUES (?, ?, ?, ?)";
 

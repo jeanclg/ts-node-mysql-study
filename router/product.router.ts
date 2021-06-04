@@ -4,7 +4,16 @@ import { BasicProduct, Product } from "../types/product.type";
 
 const productRouter = express.Router();
 
-// Buscar dados de uma order
+// Buscar todos os produtos
+productRouter.get("/all", async (req: Request, res: Response) => {
+  productModel.findAll((err: Error, products: Product[]) => {
+    if (err) return res.status(500).json(err);
+
+    res.status(200).json({ data: products });
+  });
+});
+
+// Buscar dados de um produto
 productRouter.get("/:id", async (req: Request, res: Response) => {
   // Pega o valor do id passado pela URL e atribui a variavel id
   const id: number = Number(req.params.id);
@@ -16,6 +25,7 @@ productRouter.get("/:id", async (req: Request, res: Response) => {
   });
 });
 
+// Cadastrar um novo produto
 productRouter.post("/signup", async (req: Request, res: Response) => {
   const newProduct: Product = req.body;
 

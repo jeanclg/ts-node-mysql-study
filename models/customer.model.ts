@@ -3,7 +3,34 @@ import { db } from "../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 import { Cipher } from "crypto";
 
-// Modelo que faz a Query de 1 elemento apenas
+// Modelo que faz a query e retorna todos os usuarios cadastrados
+export const findAll = (cb: Function) => {
+  // Query do MySQL
+  const queryString = "SELECT * FROM customer";
+  // Faz a query no mysql retornando todos os usuarios cadastrados
+  db.query(queryString, (err, result) => {
+    if (err) cb(err);
+    // Retorna os valores da query e atribui a variavel rows, do tipo array de RowData
+    const rows = <RowDataPacket[]>result;
+    // Variavel auxiliar para receber todos os usuarios que serão gerados no for
+    const customers: Customer[] = [];
+
+    rows.forEach((row) => {
+      const customer: Customer = {
+        id: row.id,
+        name: row.name,
+        password: row.password,
+        email: row.email,
+      };
+
+      customers.push(customer);
+    });
+
+    cb(err, customers);
+  });
+};
+
+// Modelo que faz a query de 1 elemento apenas
 export const findOne = (orderId: number, cb: Function) => {
   // Query do MySQL
   const queryString = "SELECT * FROM customer WHERE customer.id=?";
