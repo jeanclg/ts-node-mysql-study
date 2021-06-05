@@ -71,6 +71,7 @@ export const create = (customer: Customer, cb: Function) => {
   );
 };
 
+// Modelo que atualiza os dados do usuario
 export const update = (customer: Customer, cb: Function) => {
   const queryString = `UPDATE customer SET name=?, email=?, password=? WHERE id=?`;
 
@@ -83,4 +84,15 @@ export const update = (customer: Customer, cb: Function) => {
       cb(null);
     }
   );
+};
+
+// Modelo que deleta do banco um usuario
+export const deleteCustomer = (customerId: number, cb: Function) => {
+  const queryString = `DELETE FROM customer WHERE id=?`;
+
+  db.query(queryString, customerId, (err, result) => {
+    if (err) cb(err);
+
+    cb(null);
+  });
 };

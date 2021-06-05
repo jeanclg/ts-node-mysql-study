@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import * as productModel from "../models/product.model";
-import { BasicProduct, Product } from "../types/product.type";
+import { Product } from "../types/product.type";
 
 const productRouter = express.Router();
 
@@ -44,6 +44,17 @@ productRouter.put("/update/:id", async (req: Request, res: Response) => {
     if (err) return res.status(500).json(err);
 
     res.status(200).send();
+  });
+});
+
+// Deletar um produto existente
+productRouter.delete("/delete/:id", async (req: Request, res: Response) => {
+  const id: number = Number(req.params.id);
+
+  productModel.deleteProduct(id, (err: Error, product: Product) => {
+    if (err) return res.status(500).json(err);
+
+    res.status(200).json({});
   });
 });
 

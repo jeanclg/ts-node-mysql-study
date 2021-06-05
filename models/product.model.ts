@@ -93,3 +93,14 @@ export const update = (product: Product, cb: Function) => {
     }
   );
 };
+
+// Modelo que deleta um produto existente
+export const deleteProduct = (productId: number, cb: Function) => {
+  const queryString = `DELETE FROM product WHERE id=?`;
+
+  db.query(queryString, productId, (err, result) => {
+    if (err) cb(err);
+
+    cb(null);
+  });
+};

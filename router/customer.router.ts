@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import * as customerModel from "../models/customer.model";
-import { BasicCustomer, Customer } from "../types/customer.type";
+import { Customer } from "../types/customer.type";
 
 const customerRouter = express.Router();
 
@@ -44,6 +44,17 @@ customerRouter.put("/update/:id", async (req: Request, res: Response) => {
     if (err) return res.status(500).json(err);
 
     res.status(200).send();
+  });
+});
+
+// Deleter um usuario
+customerRouter.delete("/delete/:id", async (req: Request, res: Response) => {
+  const id: number = Number(req.params.id);
+
+  customerModel.deleteCustomer(id, (err: Error, removedCustomer: Customer) => {
+    if (err) return res.status(500).json(err);
+
+    res.status(200).json({});
   });
 });
 

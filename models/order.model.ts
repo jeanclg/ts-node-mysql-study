@@ -1,4 +1,4 @@
-import { BasicOrder, Order, OrderWithDetails } from "../types/order.type";
+import { OrderWithDetails } from "../types/order.type";
 import { db } from "../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 
