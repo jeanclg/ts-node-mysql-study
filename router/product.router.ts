@@ -36,4 +36,15 @@ productRouter.post("/signup", async (req: Request, res: Response) => {
   });
 });
 
+// Editar um produto existente
+productRouter.put("/update/:id", async (req: Request, res: Response) => {
+  const product: Product = req.body;
+
+  productModel.update(product, (err: Error, newProduct: Product) => {
+    if (err) return res.status(500).json(err);
+
+    res.status(200).send();
+  });
+});
+
 export { productRouter };

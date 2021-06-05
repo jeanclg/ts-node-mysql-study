@@ -1,7 +1,7 @@
 import { BasicCustomer, Customer } from "../types/customer.type";
 import { db } from "../db";
 import { OkPacket, RowDataPacket } from "mysql2";
-import { Cipher } from "crypto";
+import { customerRouter } from "../router/customer.router";
 
 // Modelo que faz a query e retorna todos os usuarios cadastrados
 export const findAll = (cb: Function) => {
@@ -52,6 +52,7 @@ export const findOne = (orderId: number, cb: Function) => {
   });
 };
 
+// Modelo quer cria um novo usuario
 export const create = (customer: Customer, cb: Function) => {
   // Query do MySQL
   const queryString =
@@ -66,6 +67,20 @@ export const create = (customer: Customer, cb: Function) => {
       const insertId = (<OkPacket>result).insertId;
       // Callback que caso não tenha erros cadastra um novo customer
       cb(err, insertId);
+    }
+  );
+};
+
+export const update = (customer: Customer, cb: Function) => {
+  const queryString = `UPDATE customer SET name=?, email=?, password=? WHERE id=?`;
+
+  db.query(
+    queryString,
+    [customer.name, customer.email, customer.password, customer.id],
+    (err, result) => {
+      if (err) cb(err);
+
+      cb(null);
     }
   );
 };

@@ -36,4 +36,15 @@ customerRouter.post("/signup", async (req: Request, res: Response) => {
   });
 });
 
+// Atualizar dados de um usuario
+customerRouter.put("/update/:id", async (req: Request, res: Response) => {
+  const customer: Customer = req.body;
+
+  customerModel.update(customer, (err: Error, newCustomer: Customer) => {
+    if (err) return res.status(500).json(err);
+
+    res.status(200).send();
+  });
+});
+
 export { customerRouter };

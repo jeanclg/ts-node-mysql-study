@@ -72,3 +72,24 @@ export const create = (product: Product, cb: Function) => {
     }
   );
 };
+
+// Modelo que edita um produto existente
+export const update = (product: Product, cb: Function) => {
+  const queryString = `UPDATE product SET name=?, description=?, instock_quantity=?, price=? WHERE id=?`;
+
+  db.query(
+    queryString,
+    [
+      product.name,
+      product.description,
+      product.instock_quantity,
+      product.price,
+      product.id,
+    ],
+    (err, result) => {
+      if (err) cb(err);
+
+      cb(null);
+    }
+  );
+};
