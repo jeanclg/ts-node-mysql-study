@@ -4,7 +4,7 @@ import { BasicProduct, Product } from "./product.type";
 export interface BasicOrder {
   product: BasicProduct;
   customer: BasicCustomer;
-  productQuantity: number;
+  product_quantity: number;
 }
 
 export interface Order extends BasicOrder {

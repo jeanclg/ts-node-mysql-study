@@ -1,4 +1,4 @@
-import { OrderWithDetails } from "../types/order.type";
+import { Order, OrderWithDetails } from "../types/order.type";
 import { db } from "../db";
 import { OkPacket, RowDataPacket } from "mysql2";
 
@@ -22,7 +22,6 @@ export const findOne = (orderId: number, cb: Function) => {
     }
     // Pega o resultado da Query do tipo RowDataPacket e atribui a variavel row
     const row = (<RowDataPacket>result)[0];
-    console.log(row);
     // Modelo da linha que esta sendo retornada
     const order: OrderWithDetails = {
       orderId: row.order_id,
@@ -38,9 +37,52 @@ export const findOne = (orderId: number, cb: Function) => {
         instock_quantity: row.instock_quantity,
         price: row.price,
       },
-      productQuantity: row.product_quantity,
+      product_quantity: row.product_quantity,
     };
     // Callback que caso não tenha erros envia para a rota a linha recebida na query
     cb(null, order);
+  });
+};
+
+// Modelo da query que busca todas as ordens
+export const findAll = (callback: Function) => {
+  const queryString = `
+  SELECT 
+  product_order.*,
+    product.*,
+    customer.name,
+    customer.email
+  FROM product_order
+  INNER JOIN customer ON customer.id=product_order.customer_id
+  INNER JOIN product ON product.id=product_order.product_id`;
+
+  db.query(queryString, (err, result) => {
+    if (err) {
+      callback(err);
+    }
+
+    const rows = <RowDataPacket[]>result;
+    const orders: Order[] = [];
+    console.log(rows);
+    rows.forEach((row) => {
+      const order: OrderWithDetails = {
+        orderId: row.order_id,
+        customer: {
+          id: row.customer_id,
+          name: row.customer_name,
+          email: row.email,
+        },
+        product: {
+          id: row.product_id,
+          name: row.name,
+          description: row.description,
+          instock_quantity: row.instock_quantity,
+          price: row.price,
+        },
+        product_quantity: row.product_quantity,
+      };
+      orders.push(order);
+    });
+    callback(err, orders);
   });
 };
