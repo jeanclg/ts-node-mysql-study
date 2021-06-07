@@ -2,6 +2,29 @@ import { BasicProduct, Product } from "../types/product.type";
 import { db } from "../db";
 import { RowDataPacket, OkPacket } from "mysql2";
 
+// Modelo que cria um novo produto
+export const create = (product: Product, cb: Function) => {
+  // Query do MySQL
+  const queryString =
+    "INSERT INTO product (name, description, instock_quantity, price) VALUES (?, ?, ?, ?)";
+
+  db.query(
+    queryString,
+    [
+      product.name,
+      product.description,
+      product.instock_quantity,
+      product.price,
+    ],
+    (err, result) => {
+      if (err) cb(err);
+
+      const insertId = (<OkPacket>result).insertId;
+      cb(err, insertId);
+    }
+  );
+};
+
 // Modelo que faz a query de todos os produtos
 export const findAll = (cb: Function) => {
   const queryString = "SELECT * FROM product";
@@ -48,29 +71,6 @@ export const findOne = (orderId: number, cb: Function) => {
     // Callback que caso não tenha erros envia para a rota a linha recebida na query
     cb(err, product);
   });
-};
-
-// Modelo que cria um novo produto
-export const create = (product: Product, cb: Function) => {
-  // Query do MySQL
-  const queryString =
-    "INSERT INTO product (name, description, instock_quantity, price) VALUES (?, ?, ?, ?)";
-
-  db.query(
-    queryString,
-    [
-      product.name,
-      product.description,
-      product.instock_quantity,
-      product.price,
-    ],
-    (err, result) => {
-      if (err) cb(err);
-
-      const insertId = (<OkPacket>result).insertId;
-      cb(err, insertId);
-    }
-  );
 };
 
 // Modelo que edita um produto existente
